@@ -14,11 +14,17 @@ export class App {
         genModule
       );
 
+      this.mainUrl = new URL(this.config.apiUrl);
+      this.mainUrl.pathname = "/";
+      this.mainUrl = this.mainUrl.href;
+
       while (true) {
         (async () => {
           try {
             await this.checkForNewLogs();
-          } catch {}
+          } catch (e) {
+            console.log(e);
+          }
         })();
         await new Promise((r) => setTimeout(r, this.updateCheckInterval));
       }
@@ -38,6 +44,7 @@ export class App {
           text: `${log.actionName} triggered.`,
           media: [],
           time: log.time,
+          open: this.mainUrl,
           points: this.config.points,
         });
       }
